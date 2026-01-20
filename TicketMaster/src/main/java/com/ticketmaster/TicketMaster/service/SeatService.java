@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class SeatService {
@@ -24,6 +25,7 @@ public class SeatService {
                 .orElseThrow(() -> new RuntimeException("Seat not found"));
 
         if (seat.getStatus() == SeatStatus.HELD &&
+                seat.getHoldExpiry() != null &&
                 seat.getHoldExpiry().isAfter(LocalDateTime.now())) {
 
             long seconds = Duration.between(
@@ -37,5 +39,14 @@ public class SeatService {
         seat.setHoldExpiry(LocalDateTime.now().plusMinutes(10));
 
         return seatRepo.save(seat);
+    }
+
+    public List<Seat> getAllSeats() {
+        return seatRepo.findAll();
+    }
+
+    public Seat getSeatById(Long id) {
+        return seatRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Seat with ID " + id + " not found"));
     }
 }
