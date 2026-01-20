@@ -1,7 +1,7 @@
 package com.ticketmaster.TicketMaster.entity;
 
 import com.ticketmaster.TicketMaster.enums.Tier;
-import jakarta.persistence.*; 
+import jakarta.persistence.*;
 import lombok.Data;
 
 @Entity
