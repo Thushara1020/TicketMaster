@@ -1,41 +1,42 @@
 package com.ticketmaster.TicketMaster.controller;
 
-import com.ticketmaster.TicketMaster.entity.Seat;
+import com.icet.ticketmaster.dto.SeatHoldRequest;
+
+import com.icet.ticketmaster.entity.Seat;
+import com.ticketmaster.TicketMaster.dto.SeatHoldResponse;
 import com.ticketmaster.TicketMaster.service.SeatService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
-@RequestMapping("/seats")
+@RequestMapping("/api/seats")
 public class SeatController {
 
-    @Autowired
-    private SeatService seatService;
+    private final SeatService seatService;
 
-    @GetMapping
-    public List<Seat> getAllSeats() {
-        return seatService.getAllSeats();
+    public SeatController(SeatService seatService) {
+        this.seatService = seatService;
     }
 
+    @PostMapping("/{id}/hold")
+    public ResponseEntity<SeatHoldResponse> holdSeat(
+            @PathVariable Long id,
+            @RequestBody SeatHoldRequest request) {
+        SeatHoldResponse response = seatService.holdSeat(id, request.getUserId());
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/event/{eventId}/available")
+    public ResponseEntity<List<Seat>> getAvailableSeats(@PathVariable Long eventId) {
+        List<Seat> seats = seatService.getAvailableSeats(eventId);
+        return ResponseEntity.ok(seats);
+    }
 
     @GetMapping("/{id}")
-    public Seat getSeatById(@PathVariable Long id) {
-        return seatService.getSeatById(id);
-    }
-    @PostMapping("/{seatId}/hold")
-    public ResponseEntity<?> holdSeat(@PathVariable Long seatId, @RequestParam Long userId) {
-        try {
-            Seat updatedSeat = seatService.holdSeat(seatId, userId);
-            return ResponseEntity.ok(updatedSeat);
-        } catch (RuntimeException e) {
-
-            return ResponseEntity.status(404).body(Map.of("message", e.getMessage()));
-        } catch (Exception e) {
-            return ResponseEntity.status(500).body(Map.of("error", "Internal error occurred"));
-        }
+    public ResponseEntity<Seat> getSeatById(@PathVariable Long id) {
+        Seat seat = seatService.getSeatById(id);
+        return ResponseEntity.ok(seat);
     }
 }
