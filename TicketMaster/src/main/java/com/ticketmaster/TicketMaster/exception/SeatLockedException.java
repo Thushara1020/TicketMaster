@@ -1,7 +1,14 @@
-package com.ticketmaster.TicketMaster.exception;
+package com.icet.ticketmaster.exception;
 
 public class SeatLockedException extends RuntimeException {
-    public SeatLockedException(String message) {
-        super(message);
+    private final long remainingSeconds;
+
+    public SeatLockedException(long remainingSeconds) {
+        super("Seat is currently locked. Try again in " + remainingSeconds + " seconds.");
+        this.remainingSeconds = remainingSeconds;
+    }
+
+    public long getRemainingSeconds() {
+        return remainingSeconds;
     }
 }
