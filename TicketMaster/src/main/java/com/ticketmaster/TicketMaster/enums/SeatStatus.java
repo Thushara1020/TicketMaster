@@ -1,3 +1,7 @@
-package com.ticketmaster.TicketMaster.enums;
+package com.icet.ticketmaster.enums;
 
-public enum SeatStatus { AVAILABLE, HELD, SOLD }
+public enum SeatStatus {
+    AVAILABLE,
+    HELD,
+    SOLD
+}
