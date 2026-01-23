@@ -1,22 +1,32 @@
-package com.ticketmaster.TicketMaster.entity;
+package com.icet.ticketmaster.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Entity
+@Table(name = "events")
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Event {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String name;
-    private Double basePrice;
-    private Boolean isHighDemand;
-    private LocalDateTime eventDate;
 
-    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
-    private List<Seat> seats;
+    @Column(name = "base_price", nullable = false, precision = 10, scale = 2)
+    private BigDecimal basePrice;
+
+    @Column(name = "is_high_demand", nullable = false)
+    private Boolean isHighDemand = false;
+
+    @Column(name = "event_date", nullable = false)
+    private LocalDateTime eventDate;
 }
