@@ -1,5 +1,6 @@
-package com.ticketmaster.TicketMaster.enums;
+package com.icet.ticketmaster.enums;
 
 public enum BookingStatus {
-    CONFIRMED, CANCELLED
+    CONFIRMED,
+    CANCELLED
 }
