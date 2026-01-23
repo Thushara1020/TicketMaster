@@ -1,24 +1,28 @@
-package com.ticketmaster.TicketMaster.entity;
+package com.icet.ticketmaster.entity;
 
-import com.ticketmaster.TicketMaster.enums.Tier;
+import com.icet.ticketmaster.enums.UserTier;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import java.util.List;
+import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "app_user")
+@Table(name = "users")
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String name;
-    private String email;
 
     @Enumerated(EnumType.STRING)
-    private Tier tier;
+    @Column(nullable = false)
+    private UserTier tier;
 
-    @OneToMany(mappedBy = "user")
-    private List<Booking> bookings;
+    @Column(nullable = false, unique = true)
+    private String email;
 }
