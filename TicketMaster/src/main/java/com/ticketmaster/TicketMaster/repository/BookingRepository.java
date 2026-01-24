@@ -1,6 +1,12 @@
-package com.ticketmaster.TicketMaster.repository;
+package com.icet.ticketmaster.repository;
 
-import com.ticketmaster.TicketMaster.entity.Booking;
+import com.icet.ticketmaster.entity.Booking;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-public interface BookingRepository extends JpaRepository<Booking, Long> {}
+import java.util.List;
+
+@Repository
+public interface BookingRepository extends JpaRepository<Booking, Long> {
+    List<Booking> findByUserId(Long userId);
+}
