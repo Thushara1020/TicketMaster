@@ -1,6 +1,9 @@
-package com.ticketmaster.TicketMaster.repository;
+package com.icet.ticketmaster.repository;
 
-import com.ticketmaster.TicketMaster.entity.Event;
+import com.icet.ticketmaster.entity.Event;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-public interface EventRepository extends JpaRepository<Event, Long> {}
+@Repository
+public interface EventRepository extends JpaRepository<Event, Long> {
+}
