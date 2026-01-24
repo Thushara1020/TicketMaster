@@ -1,35 +1,27 @@
 package com.ticketmaster.TicketMaster.service;
 
-import com.ticketmaster.TicketMaster.dto.PriceResponse;
-import com.ticketmaster.TicketMaster.entity.Event;
-import com.ticketmaster.TicketMaster.entity.User;
-import com.ticketmaster.TicketMaster.strategy.PlatinumPriceStrategy;
-import com.ticketmaster.TicketMaster.strategy.PriceStrategy;
-import com.ticketmaster.TicketMaster.strategy.RegularPriceStrategy;
-import com.ticketmaster.TicketMaster.strategy.VipPriceStrategy;
+import com.icet.ticketmaster.entity.Event;
+import com.icet.ticketmaster.entity.User;
+import com.ticketmaster.TicketMaster.dto.PriceCalculationResult;
+import com.ticketmaster.TicketMaster.strategy.PricingStrategy;
 import org.springframework.stereotype.Service;
 
-import static com.ticketmaster.TicketMaster.enums.Tier.PLATINUM;
-import static com.ticketmaster.TicketMaster.enums.Tier.VIP;
+import java.util.List;
 
 @Service
 public class PriceCalculatorService {
 
-    public PriceResponse calculate(User user, Event event) {
-        PriceStrategy strategy;
+    private final List<PricingStrategy> pricingStrategies;
 
-        switch (user.getTier()) {
-            case VIP:
-                strategy = new VipPriceStrategy();
-                break;
-            case PLATINUM:
-                strategy = new PlatinumPriceStrategy();
-                break;
-            default:
-                strategy = new RegularPriceStrategy();
-                break;
-        }
+    public PriceCalculatorService(List<PricingStrategy> pricingStrategies) {
+        this.pricingStrategies = pricingStrategies;
+    }
 
-        return strategy.calculate(user, event);
+    public PriceCalculationResult calculatePrice(User user, Event event) {
+        return pricingStrategies.stream()
+                .filter(strategy -> strategy.supports(user))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("No pricing strategy found for user tier: " + user.getTier()))
+                .calculatePrice(user, event);
     }
 }
